@@ -61,7 +61,12 @@ The options object has overridable defaults that look like this:
   prevColor: 'grey',
   actionColor: 'bright-blue',
   nextColor: 'green',
-  predicate: ''
+  // when non-null, only prints if predicate(getState, action) is truthy
+  predicate: null,
+  // useful to trim parts of the state atom that are too verbose
+  stateTransformer: (state) => state,
+  // useful to censor private messages (containing password, etc.)
+  actionTransformer: (action) => action,
 }
 ```
 
