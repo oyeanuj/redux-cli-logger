@@ -28,7 +28,7 @@ const renderToConsole = (obj, rightArrow) => {
 export default function createCLILogger (options) {
   const {
     downArrow = '▼',
-    rightArrow = '',
+    rightArrow = '▶',
     messageColor = 'bright-yellow',
     prevColor = 'grey',
     actionColor = 'bright-blue',
