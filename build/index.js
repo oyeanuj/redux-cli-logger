@@ -38,7 +38,7 @@ function createCLILogger(options) {
   var _options$downArrow = options.downArrow;
   var downArrow = _options$downArrow === undefined ? '▼' : _options$downArrow;
   var _options$rightArrow = options.rightArrow;
-  var rightArrow = _options$rightArrow === undefined ? '' : _options$rightArrow;
+  var rightArrow = _options$rightArrow === undefined ? '▶' : _options$rightArrow;
   var _options$messageColor = options.messageColor;
   var messageColor = _options$messageColor === undefined ? 'bright-yellow' : _options$messageColor;
   var _options$prevColor = options.prevColor;
