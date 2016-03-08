@@ -1,6 +1,6 @@
 {
   "name": "redux-cli-logger",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Redux logger for a node environment",
   "main": "build/index.js",
   "scripts": {
@@ -47,5 +47,5 @@
       "url": "https://github.com/fasterthanlime"
     }
   ],
-  "directories": {},
+  "directories": {}
 }
