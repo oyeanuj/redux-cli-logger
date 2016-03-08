@@ -13,7 +13,9 @@ Configuration and output format inspired by [redux-logger](https://github.com/fc
 
 ### Installation
 
+```bash
 npm install --save-dev redux-cli-logger
+```
 
 ### Usage
 
