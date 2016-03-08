@@ -1,23 +1,26 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = createCLILogger;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _renderkid = require('renderkid');
 
-exports['default'] = createNodeLogger;
-var RenderKid = require('renderkid');
+var _renderkid2 = _interopRequireDefault(_renderkid);
 
-var kid = new RenderKid();
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//gets top level keys and prints them in format
+// gets top level keys and prints them in format
 var topLevel = function topLevel(obj, rightArrow) {
-
   var formatted = '';
   Object.keys(obj).forEach(function (key) {
-    if (key.length > 0) formatted += '<label>' + rightArrow + ' ' + key + '</label>';
-    if (obj[key]) formatted += '<pre>' + JSON.stringify(obj[key]) + '</pre>';
+    if (key.length > 0) {
+      formatted += '<label>' + rightArrow + ' ' + key + '</label>';
+    }
+    if (obj.hasOwnProperty(key)) {
+      formatted += '<pre>' + JSON.stringify(obj[key]) + '</pre>';
+    }
   });
 
   return formatted;
@@ -31,80 +34,86 @@ var renderToConsole = function renderToConsole(obj, rightArrow) {
   }
 };
 
-function createNodeLogger(customOptions) {
-  var options = _extends({
-    downArrow: '▼',
-    rightArrow: '▶',
-    messageColor: 'bright-yellow',
-    prevColor: 'grey',
-    actionColor: 'bright-blue',
-    nextColor: 'green',
-    predicate: ''
-  }, customOptions);
+function createCLILogger(options) {
+  var _options$downArrow = options.downArrow;
+  var downArrow = _options$downArrow === undefined ? '▼' : _options$downArrow;
+  var _options$rightArrow = options.rightArrow;
+  var rightArrow = _options$rightArrow === undefined ? '' : _options$rightArrow;
+  var _options$messageColor = options.messageColor;
+  var messageColor = _options$messageColor === undefined ? 'bright-yellow' : _options$messageColor;
+  var _options$prevColor = options.prevColor;
+  var prevColor = _options$prevColor === undefined ? 'grey' : _options$prevColor;
+  var _options$actionColor = options.actionColor;
+  var actionColor = _options$actionColor === undefined ? 'bright-blue' : _options$actionColor;
+  var _options$nextColor = options.nextColor;
+  var nextColor = _options$nextColor === undefined ? 'green' : _options$nextColor;
+  var _options$predicate = options.predicate;
+  var predicate = _options$predicate === undefined ? null : _options$predicate;
+  var _options$stateTransfo = options.stateTransformer;
+  var stateTransformer = _options$stateTransfo === undefined ? function (x) {
+    return x;
+  } : _options$stateTransfo;
+  var _options$actionTransf = options.actionTransformer;
+  var actionTransformer = _options$actionTransf === undefined ? function (x) {
+    return x;
+  } : _options$actionTransf;
 
-  return function (_ref) {
-    var getState = _ref.getState;
+
+  var kid = new _renderkid2.default();
+  kid.style({
+    'label': {},
+    'list': {
+      marginLeft: '1'
+    },
+    'li': {
+      marginLeft: '2'
+    },
+    'pre': {
+      marginLeft: '4',
+      display: 'block'
+    },
+    'message': {
+      display: 'block',
+      color: messageColor
+    },
+    'prev': {
+      color: prevColor
+    },
+    'action': {
+      color: actionColor
+    },
+    'next': {
+      color: nextColor
+    }
+  });
+
+  return function (store) {
     return function (next) {
       return function (action) {
+        var getState = store.getState;
 
-        //bailout on provided predicate
-        if (typeof predicate === 'function' && !predicate(getState, action)) return next(action);
 
-        //bailout on console undefined
-        if (typeof console === 'undefined') return next(action);
+        if (predicate && !predicate(getState, action)) {
+          return next(action);
+        }
 
-        var downArrow = options.downArrow;
-        var rightArrow = options.rightArrow;
-        var messageColor = options.messageColor;
-        var prevColor = options.prevColor;
-        var actionColor = options.actionColor;
-        var nextColor = options.nextColor;
-        var predicate = options.predicate;
+        if (typeof console === 'undefined') {
+          return next(action);
+        }
 
-        var prevState = renderToConsole(getState(), rightArrow);
-        var actionDisplay = renderToConsole(action, rightArrow);
+        var prevState = renderToConsole(stateTransformer(getState()), rightArrow);
+        var actionDisplay = renderToConsole(actionTransformer(action), rightArrow);
         var returnValue = next(action);
-        var nextState = renderToConsole(getState(), rightArrow);
+        var nextState = renderToConsole(stateTransformer(getState()), rightArrow);
         var time = new Date();
 
         var message = downArrow + ' action ' + action.type + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 
-        kid.style({
-          'label': {},
-          'list': {
-            marginLeft: '1'
-          },
-          'li': {
-            marginLeft: '2'
-          },
-          'pre': {
-            marginLeft: '4',
-            display: 'block'
-          },
-          'message': {
-            display: 'block',
-            color: messageColor
-          },
-          'prev': {
-            color: prevColor
-          },
-          'action': {
-            color: actionColor
-          },
-          'next': {
-            color: nextColor
-          }
-        });
-
-        var output = kid.render('\n    <message>\n      ' + message + '\n    </message>\n    <ul>\n      <li><prev>\n        prev state\n      </prev></li>\n      <pre><prev>\n        ' + prevState + '\n      </prev></pre>\n      <li><action>\n        action\n      </action></li>\n      <pre><action>\n        ' + actionDisplay + '\n      </action></pre>\n      <li><next>\n        next\n      </next></li>\n      <pre><next>\n        ' + nextState + '\n      </next></pre>\n    </ul>\n  ');
+        var output = kid.render('\n      <message>\n        ' + message + '\n      </message>\n      <ul>\n        <li><prev>prev state</prev></li>\n        <pre><prev>' + prevState + '</prev></pre>\n\n        <li><action>action</action></li>\n        <pre><action>' + actionDisplay + '</action></pre>\n\n        <li><next>next</next></li>\n        <pre><next>' + nextState + '</next></pre>\n      </ul>\n    ');
 
         console.log(output);
-
         return returnValue;
       };
     };
   };
 }
-
-;
-module.exports = exports['default'];
