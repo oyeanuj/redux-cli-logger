@@ -4,22 +4,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = createCLILogger;
-
-var _renderkid = require('renderkid');
-
-var _renderkid2 = _interopRequireDefault(_renderkid);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var colors = require("colors/safe");
 
 // gets top level keys and prints them in format
 var topLevel = function topLevel(obj, rightArrow) {
   var formatted = '';
   Object.keys(obj).forEach(function (key) {
     if (key.length > 0) {
-      formatted += '<label>' + rightArrow + ' ' + key + '</label>';
+      formatted += rightArrow + ' ' + key + ' ';
     }
     if (obj.hasOwnProperty(key)) {
-      formatted += '<pre>' + JSON.stringify(obj[key]) + '</pre>';
+      formatted += JSON.stringify(obj[key]) + '\n';
     }
   });
 
@@ -40,11 +35,11 @@ function createCLILogger(options) {
   var _options$rightArrow = options.rightArrow;
   var rightArrow = _options$rightArrow === undefined ? '▶' : _options$rightArrow;
   var _options$messageColor = options.messageColor;
-  var messageColor = _options$messageColor === undefined ? 'bright-yellow' : _options$messageColor;
+  var messageColor = _options$messageColor === undefined ? 'yellow' : _options$messageColor;
   var _options$prevColor = options.prevColor;
   var prevColor = _options$prevColor === undefined ? 'grey' : _options$prevColor;
   var _options$actionColor = options.actionColor;
-  var actionColor = _options$actionColor === undefined ? 'bright-blue' : _options$actionColor;
+  var actionColor = _options$actionColor === undefined ? 'blue' : _options$actionColor;
   var _options$nextColor = options.nextColor;
   var nextColor = _options$nextColor === undefined ? 'green' : _options$nextColor;
   var _options$predicate = options.predicate;
@@ -58,34 +53,6 @@ function createCLILogger(options) {
     return x;
   } : _options$actionTransf;
 
-
-  var kid = new _renderkid2.default();
-  kid.style({
-    'label': {},
-    'list': {
-      marginLeft: '1'
-    },
-    'li': {
-      marginLeft: '2'
-    },
-    'pre': {
-      marginLeft: '4',
-      display: 'block'
-    },
-    'message': {
-      display: 'block',
-      color: messageColor
-    },
-    'prev': {
-      color: prevColor
-    },
-    'action': {
-      color: actionColor
-    },
-    'next': {
-      color: nextColor
-    }
-  });
 
   return function (store) {
     return function (next) {
@@ -109,7 +76,7 @@ function createCLILogger(options) {
 
         var message = downArrow + ' action ' + action.type + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 
-        var output = kid.render('\n      <message>\n        ' + message + '\n      </message>\n      <ul>\n        <li><prev>prev state</prev></li>\n        <pre><prev>' + prevState + '</prev></pre>\n\n        <li><action>action</action></li>\n        <pre><action>' + actionDisplay + '</action></pre>\n\n        <li><next>next</next></li>\n        <pre><next>' + nextState + '</next></pre>\n      </ul>\n    ');
+        var output = colors[messageColor](message) + '\n' + ('  ' + colors[prevColor]('prev state\n' + prevState)) + ('  ' + colors[actionColor]('action\n' + actionDisplay)) + ('  ' + colors[nextColor]('next\n' + nextState));
 
         console.log(output);
         return returnValue;
