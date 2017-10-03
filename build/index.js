@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = createCLILogger;
-var colors = require("colors/safe");
+var chalk = require("chalk");
 
 // gets top level keys and prints them in format
 var topLevel = function topLevel(obj, rightArrow) {
@@ -76,7 +76,7 @@ function createCLILogger(options) {
 
         var message = downArrow + ' action ' + action.type + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 
-        var output = colors[messageColor](message) + '\n' + ('  ' + colors[prevColor]('prev state\n' + prevState)) + ('  ' + colors[actionColor]('action\n' + actionDisplay)) + ('  ' + colors[nextColor]('next\n' + nextState));
+        var output = chalk[messageColor](message) + '\n' + ('  ' + chalk[prevColor]('prev state\n' + prevState) + '\n') + ('  ' + chalk[actionColor]('action\n' + actionDisplay) + '\n') + ('  ' + chalk[nextColor]('next\n' + nextState) + '\n');
 
         console.log(output);
         return returnValue;

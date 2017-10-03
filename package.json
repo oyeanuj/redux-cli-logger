@@ -31,7 +31,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "colors": "^1.1.2"
+    "chalk": "^2.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
