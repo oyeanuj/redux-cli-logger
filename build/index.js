@@ -4,14 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = createCLILogger;
-var colors = require("colors/safe");
+var chalk = require("chalk");
 
 // gets top level keys and prints them in format
 var topLevel = function topLevel(obj, rightArrow) {
   var formatted = '';
   Object.keys(obj).forEach(function (key) {
     if (key.length > 0) {
-      formatted += rightArrow + ' ' + key + ' ';
+      formatted += rightArrow + ' ' + key.toUpperCase() + ' ';
     }
     if (obj.hasOwnProperty(key)) {
       formatted += JSON.stringify(obj[key]) + '\n';
@@ -30,26 +30,26 @@ var renderToConsole = function renderToConsole(obj, rightArrow) {
 };
 
 function createCLILogger(options) {
-  var _options$downArrow = options.downArrow;
-  var downArrow = _options$downArrow === undefined ? '▼' : _options$downArrow;
-  var _options$rightArrow = options.rightArrow;
-  var rightArrow = _options$rightArrow === undefined ? '▶' : _options$rightArrow;
-  var _options$messageColor = options.messageColor;
-  var messageColor = _options$messageColor === undefined ? 'yellow' : _options$messageColor;
-  var _options$prevColor = options.prevColor;
-  var prevColor = _options$prevColor === undefined ? 'grey' : _options$prevColor;
-  var _options$actionColor = options.actionColor;
-  var actionColor = _options$actionColor === undefined ? 'blue' : _options$actionColor;
-  var _options$nextColor = options.nextColor;
-  var nextColor = _options$nextColor === undefined ? 'green' : _options$nextColor;
-  var _options$predicate = options.predicate;
-  var predicate = _options$predicate === undefined ? null : _options$predicate;
-  var _options$stateTransfo = options.stateTransformer;
-  var stateTransformer = _options$stateTransfo === undefined ? function (x) {
+  var _options$downArrow = options.downArrow,
+      downArrow = _options$downArrow === undefined ? '▼' : _options$downArrow,
+      _options$rightArrow = options.rightArrow,
+      rightArrow = _options$rightArrow === undefined ? '▶' : _options$rightArrow,
+      _options$messageColor = options.messageColor,
+      messageColor = _options$messageColor === undefined ? 'yellow' : _options$messageColor,
+      _options$prevColor = options.prevColor,
+      prevColor = _options$prevColor === undefined ? 'grey' : _options$prevColor,
+      _options$actionColor = options.actionColor,
+      actionColor = _options$actionColor === undefined ? 'blue' : _options$actionColor,
+      _options$nextColor = options.nextColor,
+      nextColor = _options$nextColor === undefined ? 'green' : _options$nextColor,
+      _options$predicate = options.predicate,
+      predicate = _options$predicate === undefined ? null : _options$predicate,
+      _options$stateTransfo = options.stateTransformer,
+      stateTransformer = _options$stateTransfo === undefined ? function (x) {
     return x;
-  } : _options$stateTransfo;
-  var _options$actionTransf = options.actionTransformer;
-  var actionTransformer = _options$actionTransf === undefined ? function (x) {
+  } : _options$stateTransfo,
+      _options$actionTransf = options.actionTransformer,
+      actionTransformer = _options$actionTransf === undefined ? function (x) {
     return x;
   } : _options$actionTransf;
 
@@ -74,9 +74,9 @@ function createCLILogger(options) {
         var nextState = renderToConsole(stateTransformer(getState()), rightArrow);
         var time = new Date();
 
-        var message = downArrow + ' action ' + action.type + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+        var message = '\n' + downArrow + ' Action :: ' + chalk.bold(action.type) + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 
-        var output = colors[messageColor](message) + '\n' + ('  ' + colors[prevColor]('prev state\n' + prevState)) + ('  ' + colors[actionColor]('action\n' + actionDisplay)) + ('  ' + colors[nextColor]('next\n' + nextState));
+        var output = chalk[messageColor](message) + '\n' + ('  ' + chalk[prevColor](chalk.bold.underline('PREVIOUS STATE'), '\n' + prevState)) + ('  ' + chalk[actionColor](chalk.bold.underline('ACTION'), '\n' + actionDisplay)) + ('  ' + chalk[nextColor](chalk.bold.underline('NEXT STATE'), '\n' + nextState));
 
         console.log(output);
         return returnValue;

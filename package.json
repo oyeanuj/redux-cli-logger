@@ -27,11 +27,15 @@
     {
       "name": "Amos Wenger",
       "url": "https://github.com/fasterthanlime"
+    },
+    {
+      "name": "Anuj Nijhawan",
+      "url": "https://github.com/oyeanuj"
     }
   ],
   "license": "MIT",
   "dependencies": {
-    "colors": "^1.1.2"
+    "chalk": "^2.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",

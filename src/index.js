@@ -1,13 +1,13 @@
 'use strict'
 
-const colors = require("colors/safe")
+const chalk = require("chalk")
 
 // gets top level keys and prints them in format
 const topLevel = (obj, rightArrow) => {
   let formatted = ''
   Object.keys(obj).forEach(key => {
     if (key.length > 0) {
-      formatted += `${rightArrow} ${key} `
+      formatted += `${rightArrow} ${key.toUpperCase()} `
     }
     if (obj.hasOwnProperty(key)) {
       formatted += `${JSON.stringify(obj[key])}\n`
@@ -55,12 +55,12 @@ export default function createCLILogger (options) {
     const nextState = renderToConsole(stateTransformer(getState()), rightArrow)
     const time = new Date()
 
-    const message = `${downArrow} action ${action.type} @ ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+    const message = `\n${downArrow} Action :: ${chalk.bold(action.type)} @ ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
 
-    const output = `${colors[messageColor](message)}\n` +
-      `  ${colors[prevColor](`prev state\n${prevState}`)}` +
-      `  ${colors[actionColor](`action\n${actionDisplay}`)}` +
-      `  ${colors[nextColor](`next\n${nextState}`)}`
+    const output = `${chalk[messageColor](message)}\n` +
+      `  ${chalk[prevColor](chalk.bold.underline('PREVIOUS STATE'), `\n${prevState}`)}` +
+      `  ${chalk[actionColor](chalk.bold.underline('ACTION'), `\n${actionDisplay}`)}` +
+      `  ${chalk[nextColor](chalk.bold.underline('NEXT STATE'), `\n${nextState}`)}`
 
     console.log(output)
     return returnValue
