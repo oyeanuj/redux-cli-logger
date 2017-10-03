@@ -7,10 +7,10 @@ const topLevel = (obj, rightArrow) => {
   let formatted = ''
   Object.keys(obj).forEach(key => {
     if (key.length > 0) {
-      formatted += `${rightArrow} ${key} `
+      formatted += `${rightArrow} ${key.toUpperCase()} `
     }
     if (obj.hasOwnProperty(key)) {
-      formatted += `${JSON.stringify(obj[key]).toUpperCase()}\n`
+      formatted += `${JSON.stringify(obj[key])}\n`
     }
   })
 
@@ -58,9 +58,9 @@ export default function createCLILogger (options) {
     const message = `\n${downArrow} action ${action.type} @ ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
 
     const output = `${chalk[messageColor](message)}\n` +
-      `  ${chalk[prevColor](`prev state\n${prevState}`)}\n` +
-      `  ${chalk[actionColor](`action\n${actionDisplay}`)}\n` +
-      `  ${chalk[nextColor](`next\n${nextState}`)}\n`
+      `  ${chalk[prevColor](`Previous State ::\n${prevState}`)}` +
+      `  ${chalk[actionColor](`Action ::\n${actionDisplay}`)}` +
+      `  ${chalk[nextColor](`NextState ::\n${nextState}`)}`
 
     console.log(output)
     return returnValue
