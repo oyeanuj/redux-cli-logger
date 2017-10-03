@@ -58,9 +58,9 @@ export default function createCLILogger (options) {
     const message = `\n${downArrow} Action :: ${chalk.bold(action.type)} @ ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
 
     const output = `${chalk[messageColor](message)}\n` +
-      `  ${chalk[prevColor](chalk.bold.underline.bgWhite('PREVIOUS STATE'), `\n${prevState}`)}` +
-      `  ${chalk[actionColor](chalk.bold.underline.bgWhite('ACTION'), `\n${actionDisplay}`)}` +
-      `  ${chalk[nextColor](chalk.bold.underline.bgWhite('NEXT STATE'), `\n${nextState}`)}`
+      `  ${chalk[prevColor](chalk.bold.underline('PREVIOUS STATE'), `\n${prevState}`)}` +
+      `  ${chalk[actionColor](chalk.bold.underline('ACTION'), `\n${actionDisplay}`)}` +
+      `  ${chalk[nextColor](chalk.bold.underline('NEXT STATE'), `\n${nextState}`)}`
 
     console.log(output)
     return returnValue
