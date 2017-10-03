@@ -11,10 +11,10 @@ var topLevel = function topLevel(obj, rightArrow) {
   var formatted = '';
   Object.keys(obj).forEach(function (key) {
     if (key.length > 0) {
-      formatted += rightArrow + ' ' + key + ' ';
+      formatted += rightArrow + ' ' + key.toUpperCase() + ' ';
     }
     if (obj.hasOwnProperty(key)) {
-      formatted += JSON.stringify(obj[key]).toUpperCase() + '\n';
+      formatted += JSON.stringify(obj[key]) + '\n';
     }
   });
 
@@ -76,7 +76,7 @@ function createCLILogger(options) {
 
         var message = '\n' + downArrow + ' action ' + action.type + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 
-        var output = chalk[messageColor](message) + '\n' + ('  ' + chalk[prevColor]('prev state\n' + prevState) + '\n') + ('  ' + chalk[actionColor]('action\n' + actionDisplay) + '\n') + ('  ' + chalk[nextColor]('next\n' + nextState) + '\n');
+        var output = chalk[messageColor](message) + '\n' + ('  ' + chalk[prevColor]('Previous State ::\n' + prevState)) + ('  ' + chalk[actionColor]('Action ::\n' + actionDisplay)) + ('  ' + chalk[nextColor]('NextState ::\n' + nextState));
 
         console.log(output);
         return returnValue;
