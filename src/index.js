@@ -34,6 +34,7 @@ export default function createCLILogger (options) {
     actionColor = 'blue',
     nextColor = 'green',
     predicate = null,
+    log = console.log,
     stateTransformer = (x) => x,
     actionTransformer = (x) => x
   } = options
@@ -62,7 +63,7 @@ export default function createCLILogger (options) {
       `  ${colors[actionColor](`action\n${actionDisplay}`)}` +
       `  ${colors[nextColor](`next\n${nextState}`)}`
 
-    console.log(output)
+    log(output)
     return returnValue
   }
 }
