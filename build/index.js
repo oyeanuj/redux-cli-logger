@@ -76,7 +76,10 @@ function createCLILogger(options) {
         var nextState = renderToConsole(stateTransformer(getState()), rightArrow);
         var time = new Date();
 
-        var message = downArrow + ' action ' + action.type + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+        var h = padLeft(time.getHours(), 2, "0");
+        var m = padLeft(time.getMinutes(), 2, "0");
+        var s = padLeft(time.getSeconds(), 2, "0");
+        var message = downArrow + ' action ' + action.type + ' @ ' + h + ':' + m + ':' + s;
 
         var output = colors[messageColor](message) + '\n' + ('  ' + colors[prevColor]('prev state\n' + prevState)) + ('  ' + colors[actionColor]('action\n' + actionDisplay)) + ('  ' + colors[nextColor]('next\n' + nextState));
 
@@ -85,4 +88,12 @@ function createCLILogger(options) {
       };
     };
   };
+}
+
+function padLeft(input, len, filler) {
+  var output = "" + input;
+  while (output.length < len) {
+    output = filler + output;
+  }
+  return output;
 }

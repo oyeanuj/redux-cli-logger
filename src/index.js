@@ -56,7 +56,10 @@ export default function createCLILogger (options) {
     const nextState = renderToConsole(stateTransformer(getState()), rightArrow)
     const time = new Date()
 
-    const message = `${downArrow} action ${action.type} @ ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+    const h = padLeft(time.getHours(), 2, "0");
+    const m = padLeft(time.getMinutes(), 2, "0");
+    const s = padLeft(time.getSeconds(), 2, "0");
+    const message = `${downArrow} action ${action.type} @ ${h}:${m}:${s}`
 
     const output = `${colors[messageColor](message)}\n` +
       `  ${colors[prevColor](`prev state\n${prevState}`)}` +
@@ -66,4 +69,12 @@ export default function createCLILogger (options) {
     log(output)
     return returnValue
   }
+}
+
+function padLeft(input, len, filler) {
+  var output = ""+input;
+  while (output.length < len) {
+    output = filler + output;
+  }
+  return output;
 }
