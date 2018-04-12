@@ -34,6 +34,7 @@ export default function createCLILogger (options) {
     actionColor = 'blue',
     nextColor = 'green',
     predicate = null,
+    log = console.log,
     stateTransformer = (x) => x,
     actionTransformer = (x) => x
   } = options
@@ -55,14 +56,25 @@ export default function createCLILogger (options) {
     const nextState = renderToConsole(stateTransformer(getState()), rightArrow)
     const time = new Date()
 
-    const message = `\n${downArrow} Action :: ${chalk.bold(action.type)} @ ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+    const h = padLeft(time.getHours(), 2, "0");
+    const m = padLeft(time.getMinutes(), 2, "0");
+    const s = padLeft(time.getSeconds(), 2, "0");
+    const message = `\n${downArrow} Action :: ${chalk.bold(action.type)} @ ${h}:${m}:${s}`
 
     const output = `${chalk[messageColor](message)}\n` +
       `  ${chalk[prevColor](chalk.bold.underline('PREVIOUS STATE'), `\n${prevState}`)}` +
       `  ${chalk[actionColor](chalk.bold.underline('ACTION'), `\n${actionDisplay}`)}` +
       `  ${chalk[nextColor](chalk.bold.underline('NEXT STATE'), `\n${nextState}`)}`
 
-    console.log(output)
+    log(output)
     return returnValue
   }
+}
+
+function padLeft(input, len, filler) {
+  var output = ""+input;
+  while (output.length < len) {
+    output = filler + output;
+  }
+  return output;
 }

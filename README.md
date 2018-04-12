@@ -61,6 +61,7 @@ The options object has overridable defaults that look like this:
   prevColor: 'grey',
   actionColor: 'bright-blue',
   nextColor: 'green',
+  log: console.log,
   // when non-null, only prints if predicate(getState, action) is truthy
   predicate: null,
   // useful to trim parts of the state atom that are too verbose
