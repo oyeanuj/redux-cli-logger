@@ -16,6 +16,8 @@ var topLevel = function topLevel(obj, rightArrow) {
     if (obj.hasOwnProperty(key)) {
       formatted += JSON.stringify(obj[key]) + '\n';
     }
+
+    formatted += "\n";
   });
 
   return formatted;
