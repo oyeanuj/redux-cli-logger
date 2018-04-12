@@ -16,6 +16,8 @@ var topLevel = function topLevel(obj, rightArrow) {
     if (obj.hasOwnProperty(key)) {
       formatted += JSON.stringify(obj[key]) + '\n';
     }
+
+    formatted += "\n";
   });
 
   return formatted;
@@ -44,6 +46,10 @@ function createCLILogger(options) {
       nextColor = _options$nextColor === undefined ? 'green' : _options$nextColor,
       _options$predicate = options.predicate,
       predicate = _options$predicate === undefined ? null : _options$predicate,
+
+      _options$log = options.log,
+      log = _options$log === undefined ? console.log : _options$log,
+
       _options$stateTransfo = options.stateTransformer,
       stateTransformer = _options$stateTransfo === undefined ? function (x) {
     return x;
@@ -74,13 +80,25 @@ function createCLILogger(options) {
         var nextState = renderToConsole(stateTransformer(getState()), rightArrow);
         var time = new Date();
 
-        var message = '\n' + downArrow + ' Action :: ' + chalk.bold(action.type) + ' @ ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+        var h = padLeft(time.getHours(), 2, "0");
+        var m = padLeft(time.getMinutes(), 2, "0");
+        var s = padLeft(time.getSeconds(), 2, "0");
+        var message = '\n' + downArrow + ' Action :: ' + chalk.bold(action.type) + ' @ ' + h + ':' + m + ':' + s;
+
 
         var output = chalk[messageColor](message) + '\n' + ('  ' + chalk[prevColor](chalk.bold.underline('PREVIOUS STATE'), '\n' + prevState)) + ('  ' + chalk[actionColor](chalk.bold.underline('ACTION'), '\n' + actionDisplay)) + ('  ' + chalk[nextColor](chalk.bold.underline('NEXT STATE'), '\n' + nextState));
 
-        console.log(output);
+        log(output);
         return returnValue;
       };
     };
   };
+}
+
+function padLeft(input, len, filler) {
+  var output = "" + input;
+  while (output.length < len) {
+    output = filler + output;
+  }
+  return output;
 }
