@@ -7,7 +7,7 @@ const topLevel = (obj, rightArrow) => {
   let formatted = ''
   Object.keys(obj).forEach(key => {
     if (key.length > 0) {
-      formatted += `${rightArrow} ${key.toUpperCase()} `
+      formatted += `${rightArrow} ${key} `
     }
     if (obj.hasOwnProperty(key)) {
       formatted += `${JSON.stringify(obj[key])}\n`
